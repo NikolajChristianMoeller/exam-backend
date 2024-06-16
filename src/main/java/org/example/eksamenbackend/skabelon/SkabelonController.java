@@ -20,11 +20,11 @@ private final SkabelonService skabelonService;
         return ResponseEntity.ok(skabelonService.findAll());
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<SkabelonDTO> findById (@PathVariable Long id) {
         return  ResponseEntity.of(skabelonService.findById(id));
     }
-    
+
     @PostMapping
     public ResponseEntity<SkabelonDTO> createSkabelon (@RequestBody SkabelonDTO skabelonDTO) {
         return ResponseEntity.status(201).body(skabelonService.createSkabelon(skabelonDTO));
