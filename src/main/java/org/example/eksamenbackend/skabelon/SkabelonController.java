@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/skabelon")
+@CrossOrigin(origins = "http://localhost:5173")
 public class SkabelonController {
 
 private final SkabelonService skabelonService;
@@ -31,7 +32,6 @@ private final SkabelonService skabelonService;
     }
 
     @PutMapping("/{id}")
-
     public ResponseEntity<SkabelonDTO> updateSkabelon (@PathVariable Long id, @RequestBody SkabelonDTO skabelonDTO) {
         return ResponseEntity.ok(skabelonService.updateSkabelon(id, skabelonDTO));
     }

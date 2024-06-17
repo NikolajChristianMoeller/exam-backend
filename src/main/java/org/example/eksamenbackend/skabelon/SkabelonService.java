@@ -18,7 +18,6 @@ public class SkabelonService {
 
     public List<SkabelonDTO> findAll() {
         return skabelonRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
-
     }
 
     public SkabelonDTO createSkabelon(SkabelonDTO skabelonDTO) {
