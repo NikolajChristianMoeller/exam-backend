@@ -1,7 +1,7 @@
-package errorhandling;
+package org.example.eksamenbackend.errorhandling;
 
-import errorhandling.exception.NotFoundException;
-import errorhandling.exception.ValidationException;
+import org.example.eksamenbackend.errorhandling.exception.NotFoundException;
+import org.example.eksamenbackend.errorhandling.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

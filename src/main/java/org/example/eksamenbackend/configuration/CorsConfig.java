@@ -1,4 +1,4 @@
-package configuration;
+package org.example.eksamenbackend.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

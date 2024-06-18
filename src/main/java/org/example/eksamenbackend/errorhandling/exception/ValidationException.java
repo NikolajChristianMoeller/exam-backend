@@ -1,4 +1,4 @@
-package errorhandling.exception;
+package org.example.eksamenbackend.errorhandling.exception;
 
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {

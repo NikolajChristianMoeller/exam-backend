@@ -1,7 +1,7 @@
 package org.example.eksamenbackend.skabelon;
 
-import errorhandling.exception.NotFoundException;
-import errorhandling.exception.ValidationException;
+import org.example.eksamenbackend.errorhandling.exception.NotFoundException;
+import org.example.eksamenbackend.errorhandling.exception.ValidationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
