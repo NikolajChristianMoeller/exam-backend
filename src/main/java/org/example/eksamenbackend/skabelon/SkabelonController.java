@@ -7,7 +7,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/skabelons")
-@CrossOrigin(origins = "http://localhost:5173")
 public class SkabelonController {
 
 private final SkabelonService skabelonService;
