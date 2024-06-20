@@ -91,10 +91,10 @@ public class ParticipantControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.name").isEqualTo("Test Entity")
-                .jsonPath("$.gender").isEqualTo("Test Gender")
-                .jsonPath("$.age").isEqualTo(25)
-                .jsonPath("$.club").isEqualTo("Test Club");
+                .jsonPath("$[0].name").isEqualTo("Test Entity")
+                .jsonPath("$[0].gender").isEqualTo("Test Gender")
+                .jsonPath("$[0].age").isEqualTo(25)
+                .jsonPath("$[0].club").isEqualTo("Test Club");
 
         verify(participantRepository, times(1)).findAll();
     }
