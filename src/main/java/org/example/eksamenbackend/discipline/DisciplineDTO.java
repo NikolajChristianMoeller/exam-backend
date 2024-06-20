@@ -1,4 +1,4 @@
-package org.example.eksamenbackend.participant;
+package org.example.eksamenbackend.discipline;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,11 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ParticipantDTO {
+public class DisciplineDTO {
 
     private Long id;
     private String name;
-    private String gender;
-    private int age;
-    private String club;
+    private String resultType;
 }

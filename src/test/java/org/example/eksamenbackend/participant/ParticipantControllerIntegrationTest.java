@@ -1,12 +1,10 @@
-package org.example.eksamenbackend.skabelon;
+package org.example.eksamenbackend.participant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 
-import org.example.eksamenbackend.participant.Participant;
-import org.example.eksamenbackend.participant.ParticipantRepository;
-import org.example.eksamenbackend.participant.ParticipantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +21,9 @@ import java.util.Optional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ComponentScan(basePackageClasses = {ParticipantService.class})
-public class SkabelonControllerIntegrationTest {
+public class ParticipantControllerIntegrationTest {
     @MockBean
-    ParticipantRepository skabelonRepository;
+    ParticipantRepository participantRepository;
 
     @Autowired
     WebTestClient webClient;
@@ -37,12 +35,14 @@ public class SkabelonControllerIntegrationTest {
         mockTestClass = new Participant();
         mockTestClass.setId(1L);
         mockTestClass.setName("Test Entity");
+        mockTestClass.setGender("Test Gender");
         mockTestClass.setAge(25);
+        mockTestClass.setClub("Test Club");
 
-        when(skabelonRepository.save(any(Participant.class))).thenReturn(mockTestClass);
-        when(skabelonRepository.findById(1L)).thenReturn(Optional.of(mockTestClass));
-        when(skabelonRepository.findAll()).thenReturn(Collections.singletonList(mockTestClass));
-        doNothing().when(skabelonRepository).deleteById(1L);
+        when(participantRepository.save(any(Participant.class))).thenReturn(mockTestClass);
+        when(participantRepository.findById(1L)).thenReturn(Optional.of(mockTestClass));
+        when(participantRepository.findAll()).thenReturn(Collections.singletonList(mockTestClass));
+        doNothing().when(participantRepository).deleteById(1L);
     }
 
     @Test
@@ -53,72 +53,80 @@ public class SkabelonControllerIntegrationTest {
     @Test
     void createTestClass() {
         webClient
-                .post().uri("/skabelons")
+                .post().uri("/participants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("""
                     {
                         "name":"Test Entity",
-                        "age": 25
+                        "gender":"Test Gender",
+                        "age": 25,
+                        "club":"Test Club"
                     }
                 """)
                 .exchange()
                 .expectStatus().isCreated();
 
-        verify(skabelonRepository, times(1)).save(any(Participant.class));
+        verify(participantRepository, times(1)).save(any(Participant.class));
     }
 
     @Test
     void getTestClass() {
         webClient
-                .get().uri("/skabelons/1")
+                .get().uri("/participants/1")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$.name").isEqualTo("Test Entity")
-                .jsonPath("$.age").isEqualTo(25);
+                .jsonPath("$.gender").isEqualTo("Test Gender")
+                .jsonPath("$.age").isEqualTo(25)
+                .jsonPath("$.club").isEqualTo("Test Club");
 
-        verify(skabelonRepository, times(1)).findById(1L);
+        verify(participantRepository, times(1)).findById(1L);
     }
 
     @Test
     void getAllTestClass() {
         webClient
-                .get().uri("/skabelons")
+                .get().uri("/participants")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$[0].name").isEqualTo("Test Entity")
-                .jsonPath("$[0].age").isEqualTo(25);
+                .jsonPath("$.name").isEqualTo("Test Entity")
+                .jsonPath("$.gender").isEqualTo("Test Gender")
+                .jsonPath("$.age").isEqualTo(25)
+                .jsonPath("$.club").isEqualTo("Test Club");
 
-        verify(skabelonRepository, times(1)).findAll();
+        verify(participantRepository, times(1)).findAll();
     }
 
     @Test
     void updateTestClass() {
-        when(skabelonRepository.save(any(Participant.class))).thenReturn(mockTestClass);
+        when(participantRepository.save(any(Participant.class))).thenReturn(mockTestClass);
 
         webClient
-                .put().uri("/skabelons/1")
+                .put().uri("/participants/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("""
                     {
                         "name":"Updated Entity",
-                        "age": 35
+                        "gender":"Updated Gender",
+                        "age": 35,
+                        "club":"Updated Club"
                     }
                 """)
                 .exchange()
                 .expectStatus().isOk();
 
-        verify(skabelonRepository, times(1)).save(any(Participant.class));
+        verify(participantRepository, times(1)).save(any(Participant.class));
     }
 
     @Test
     void deleteTestClass() {
         webClient
-                .delete().uri("/skabelons/1")
+                .delete().uri("/participants/1")
                 .exchange()
                 .expectStatus().isOk();
 
-        verify(skabelonRepository, times(1)).deleteById(1L);
+        verify(participantRepository, times(1)).deleteById(1L);
     }
 }

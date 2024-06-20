@@ -26,7 +26,9 @@ public class ParticipantService {
         }
         Participant participant = new Participant();
         participant.setName(participantDTO.getName());
+        participant.setGender(participantDTO.getGender());
         participant.setAge(participantDTO.getAge());
+        participant.setClub(participantDTO.getClub());
         participantRepository.save(participant);
         return toDTO(participant);
     }
@@ -35,7 +37,9 @@ public class ParticipantService {
         ParticipantDTO participantDTO = new ParticipantDTO();
         participantDTO.setId(participant.getId());
         participantDTO.setName(participant.getName());
+        participantDTO.setGender(participant.getGender());
         participantDTO.setAge(participant.getAge());
+        participantDTO.setClub(participant.getClub());
         return participantDTO;
     }
 
@@ -51,7 +55,9 @@ public class ParticipantService {
             throw new ValidationException("Name and age must be provided");
         }
         participant.setName(participantDTO.getName());
+        participant.setGender(participantDTO.getGender());
         participant.setAge(participantDTO.getAge());
+        participant.setClub(participantDTO.getClub());
         participantRepository.save(participant);
         return toDTO(participant);
     }
