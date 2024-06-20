@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import org.example.eksamenbackend.participant.Participant;
+import org.example.eksamenbackend.participant.ParticipantRepository;
+import org.example.eksamenbackend.participant.ParticipantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +22,24 @@ import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ComponentScan(basePackageClasses = {SkabelonService.class})
+@ComponentScan(basePackageClasses = {ParticipantService.class})
 public class SkabelonControllerIntegrationTest {
     @MockBean
-    SkabelonRepository skabelonRepository;
+    ParticipantRepository skabelonRepository;
 
     @Autowired
     WebTestClient webClient;
 
-    private Skabelon mockTestClass;
+    private Participant mockTestClass;
 
     @BeforeEach
     public void setUp() {
-        mockTestClass = new Skabelon();
+        mockTestClass = new Participant();
         mockTestClass.setId(1L);
         mockTestClass.setName("Test Entity");
         mockTestClass.setAge(25);
 
-        when(skabelonRepository.save(any(Skabelon.class))).thenReturn(mockTestClass);
+        when(skabelonRepository.save(any(Participant.class))).thenReturn(mockTestClass);
         when(skabelonRepository.findById(1L)).thenReturn(Optional.of(mockTestClass));
         when(skabelonRepository.findAll()).thenReturn(Collections.singletonList(mockTestClass));
         doNothing().when(skabelonRepository).deleteById(1L);
@@ -61,7 +64,7 @@ public class SkabelonControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isCreated();
 
-        verify(skabelonRepository, times(1)).save(any(Skabelon.class));
+        verify(skabelonRepository, times(1)).save(any(Participant.class));
     }
 
     @Test
@@ -92,7 +95,7 @@ public class SkabelonControllerIntegrationTest {
 
     @Test
     void updateTestClass() {
-        when(skabelonRepository.save(any(Skabelon.class))).thenReturn(mockTestClass);
+        when(skabelonRepository.save(any(Participant.class))).thenReturn(mockTestClass);
 
         webClient
                 .put().uri("/skabelons/1")
@@ -106,7 +109,7 @@ public class SkabelonControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isOk();
 
-        verify(skabelonRepository, times(1)).save(any(Skabelon.class));
+        verify(skabelonRepository, times(1)).save(any(Participant.class));
     }
 
     @Test

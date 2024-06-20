@@ -1,4 +1,4 @@
-package org.example.eksamenbackend.skabelon;
+package org.example.eksamenbackend.participant;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Skabelon {
+public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
