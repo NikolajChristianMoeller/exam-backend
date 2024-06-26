@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.eksamenbackend.participant.Participant;
-import org.example.eksamenbackend.result.Result;
 
 import java.util.List;
 
