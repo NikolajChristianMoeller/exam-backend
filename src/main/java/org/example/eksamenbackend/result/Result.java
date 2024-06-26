@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "Result")
+@Entity
 public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

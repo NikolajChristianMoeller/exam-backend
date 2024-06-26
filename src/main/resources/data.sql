@@ -6,6 +6,7 @@ VALUES ('100m Løb', 'Time'),
        ('Diskoskast', 'Distance');
 
 
+<<<<<<< Updated upstream
 INSERT INTO participant (name, gender, age, club)
 VALUES ('Anders Andersen', 'MALE', 25, 'Aalborg Atletikklub'),
        ('Bente Bentsen', 'FEMALE', 30, 'Brøndby Atletikklub'),
@@ -37,3 +38,15 @@ VALUES (1, 1, '2022-01-01 10:00:00', 'Time', '10'),
        (4, 1, '2022-01-04 13:00:00', 'Time', '40'),
        (5, 2, '2022-01-05 14:00:00', 'Points', '50'),
        (6, 3, '2022-01-06 15:00:00', 'Distance', '60');
+=======
+CREATE TABLE IF NOT EXISTS result (
+                                      id INT AUTO_INCREMENT PRIMARY KEY,
+                                      resultType ENUM('Time', 'Height', 'Distance') NOT NULL,
+                                      date DATE NOT NULL,
+                                      resultValue DECIMAL(10,2) NOT NULL,
+                                      participantId INT NOT NULL,
+                                      disciplineId INT NOT NULL,
+                                      FOREIGN KEY (participantId) REFERENCES participant(id),
+                                      FOREIGN KEY (disciplineId) REFERENCES discipline(id)
+);
+>>>>>>> Stashed changes

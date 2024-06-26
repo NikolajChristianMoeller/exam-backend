@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "Participant")
+@Entity
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,13 +24,8 @@ public class Participant {
     private String club;
 
     @ManyToMany
-    @JoinTable(
-            name = "participant_discipline",
-            joinColumns = @JoinColumn(name = "participant_id"),
-            inverseJoinColumns = @JoinColumn(name = "discipline_id")
-    )
     private List<Discipline> disciplines;
 
-
-    
+    @OneToMany
+    private List<Result> results;
 }
