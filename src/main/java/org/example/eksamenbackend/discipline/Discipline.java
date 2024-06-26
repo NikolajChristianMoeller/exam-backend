@@ -21,5 +21,7 @@ public class Discipline {
     private String name;
     private String resultType;
 
+    @ManyToMany
+    private List<Participant> participants;
 
 }

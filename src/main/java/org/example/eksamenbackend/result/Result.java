@@ -22,5 +22,10 @@ public class Result {
     private LocalDate date;
     private String resultValue;
 
+    @ManyToOne
+    private Participant participant;
+
+    @ManyToOne
+    private Discipline discipline;
 
 }
