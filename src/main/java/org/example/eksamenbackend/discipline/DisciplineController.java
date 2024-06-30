@@ -35,8 +35,4 @@ public class DisciplineController {
         return ResponseEntity.ok(disciplineService.updateDiscipline(id, disciplineDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<DisciplineDTO> deleteDiscipline (@PathVariable Long id) {
-        return ResponseEntity.ok(disciplineService.deleteDiscipline(id));
-    }
 }

@@ -16,16 +16,25 @@ import java.time.LocalDate;
 public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+    private LocalDate resultDate;
 
-    private String resultType;
-    private LocalDate date;
+    private Double pointValue;
+
+    private Integer hours;
+    private Integer minutes;
+    private Integer seconds;
+    private Integer hundredths;
+
+    private Integer meters;
+    private Integer centimeters;
+
+    private Integer points;
+
     private String resultValue;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Participant participant;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Discipline discipline;
-
 }
