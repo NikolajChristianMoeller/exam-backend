@@ -3,10 +3,11 @@ package org.example.eksamenbackend.participant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 
+import org.example.eksamenbackend.discipline.Discipline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,34 +16,38 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ComponentScan(basePackageClasses = {ParticipantService.class})
 public class ParticipantControllerIntegrationTest {
+
     @MockBean
     ParticipantRepository participantRepository;
 
     @Autowired
     WebTestClient webClient;
 
-    private Participant mockTestClass;
+    private Participant mockParticipant;
 
     @BeforeEach
-    public void setUp() {
-        mockTestClass = new Participant();
-        mockTestClass.setId(1L);
-        mockTestClass.setName("Test Entity");
-        mockTestClass.setGender("Test Gender");
-        mockTestClass.setAge(25);
-        mockTestClass.setClub("Test Club");
+    void setUp() {
+        mockParticipant = new Participant();
+        mockParticipant.setFullName("Nikolaj Christian Møller");
+        mockParticipant.setAge(33);
+        mockParticipant.setGender(Gender.MALE);
+        mockParticipant.setAdjacentClub("Club Name");
+        mockParticipant.setCountry(Country.DENMARK);
 
-        when(participantRepository.save(any(Participant.class))).thenReturn(mockTestClass);
-        when(participantRepository.findById(1L)).thenReturn(Optional.of(mockTestClass));
-        when(participantRepository.findAll()).thenReturn(Collections.singletonList(mockTestClass));
-        doNothing().when(participantRepository).deleteById(1L);
+        Discipline discipline = new Discipline();
+        discipline.setId(1L);
+        mockParticipant.setDisciplines(List.of(discipline));
+
+        Mockito.when(participantRepository.findById(1L)).thenReturn(Optional.of(mockParticipant));
+        Mockito.when(participantRepository.findAll()).thenReturn(List.of(mockParticipant));
+        Mockito.when(participantRepository.save(any(Participant.class))).thenReturn(mockParticipant);
     }
 
     @Test
@@ -51,16 +56,59 @@ public class ParticipantControllerIntegrationTest {
     }
 
     @Test
-    void createTestClass() {
+    void getParticipantsFindAll() {
+        webClient
+                .get().uri("/participants")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].fullName").isEqualTo("Nikolaj Christian Møller")
+                .jsonPath("$[0].age").isEqualTo(33)
+                .jsonPath("$[0].gender").isEqualTo("MALE")
+                .jsonPath("$[0].adjacentClub").isEqualTo("Club Name")
+                .jsonPath("$[0].country").isEqualTo("DENMARK")
+                .jsonPath("$[0].disciplines[0].id").isEqualTo(1);
+
+        verify(participantRepository, times(1)).findAll();
+    }
+
+    @Test
+    void getParticipantsFindById() {
+        webClient
+                .get().uri("/participants/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.fullName").isEqualTo("Nikolaj Christian Møller")
+                .jsonPath("$.age").isEqualTo(33)
+                .jsonPath("$.gender").isEqualTo("MALE")
+                .jsonPath("$.adjacentClub").isEqualTo("Club Name")
+                .jsonPath("$.country").isEqualTo("DENMARK")
+                .jsonPath("$.disciplines[0].id").isEqualTo(1);
+
+        verify(participantRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void createParticipants() {
         webClient
                 .post().uri("/participants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("""
                     {
-                        "name":"Test Entity",
-                        "gender":"Test Gender",
-                        "age": 25,
-                        "club":"Test Club"
+                       "fullName": "Nikolaj Christian Møller",
+                       "age": 33,
+                       "gender": "MALE",
+                       "adjacentClub": "Club Name",
+                       "country": "DENMARK",
+                       "disciplines": [
+                           {
+                               "id": 1
+                           },
+                           {
+                               "id": 2
+                           }
+                       ]
                     }
                 """)
                 .exchange()
@@ -70,48 +118,27 @@ public class ParticipantControllerIntegrationTest {
     }
 
     @Test
-    void getTestClass() {
-        webClient
-                .get().uri("/participants/1")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.name").isEqualTo("Test Entity")
-                .jsonPath("$.gender").isEqualTo("Test Gender")
-                .jsonPath("$.age").isEqualTo(25)
-                .jsonPath("$.club").isEqualTo("Test Club");
-
-        verify(participantRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void getAllTestClass() {
-        webClient
-                .get().uri("/participants")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$[0].name").isEqualTo("Test Entity")
-                .jsonPath("$[0].gender").isEqualTo("Test Gender")
-                .jsonPath("$[0].age").isEqualTo(25)
-                .jsonPath("$[0].club").isEqualTo("Test Club");
-
-        verify(participantRepository, times(1)).findAll();
-    }
-
-    @Test
-    void updateTestClass() {
-        when(participantRepository.save(any(Participant.class))).thenReturn(mockTestClass);
+    void updateParticipantById() {
+        when(participantRepository.save(any(Participant.class))).thenReturn(mockParticipant);
 
         webClient
                 .put().uri("/participants/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("""
                     {
-                        "name":"Updated Entity",
-                        "gender":"Updated Gender",
-                        "age": 35,
-                        "club":"Updated Club"
+                       "fullName": "Nikolaj Christian Møller",
+                       "age": 33,
+                       "gender": "MALE",
+                       "adjacentClub": "Club Name",
+                       "country": "DENMARK",
+                       "disciplines": [
+                           {
+                               "id": 1
+                           },
+                           {
+                               "id": 2
+                           }
+                       ]
                     }
                 """)
                 .exchange()
@@ -121,7 +148,7 @@ public class ParticipantControllerIntegrationTest {
     }
 
     @Test
-    void deleteTestClass() {
+    void deleteParticipantById() {
         webClient
                 .delete().uri("/participants/1")
                 .exchange()
@@ -129,4 +156,5 @@ public class ParticipantControllerIntegrationTest {
 
         verify(participantRepository, times(1)).deleteById(1L);
     }
+
 }

@@ -13,6 +13,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GlobalExceptionHandlerTest {
 
     @Test
+    void testHandleException() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        GlobalExceptionHandler globalExceptionHandler = new GlobalExceptionHandler();
+        Exception exception = new Exception("Test exception");
+        ResponseEntity<?> responseEntity = globalExceptionHandler.handleGlobalException(exception);
+
+        assertEquals(500, responseEntity.getStatusCode().value());
+        assertEquals("An unexpected error occurred: Test exception", responseEntity.getBody());
+    }
+
+    @Test
     void testHandleNotFoundException() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
