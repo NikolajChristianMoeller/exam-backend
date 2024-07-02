@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS Eksamen_DB;
+CREATE SCHEMA IF NOT EXISTS eksamen_db;
 
 INSERT INTO participant (full_name, gender, age, adjacent_club, age_group, country)
 VALUES

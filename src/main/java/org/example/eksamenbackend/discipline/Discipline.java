@@ -23,5 +23,4 @@ public class Discipline {
     private ResultsType resultsType;
     @ManyToMany
     private List<Participant> participants = new ArrayList<>();
-
 }
